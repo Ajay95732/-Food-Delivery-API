@@ -15,7 +15,7 @@ namespace FoodDelivery.API.Controllers
             _productService = productService;
         }
 
-        // Add Product
+        // Add Single Product
         [HttpPost]
         public async Task<IActionResult> AddProduct(ProductDto dto)
         {
@@ -24,6 +24,18 @@ namespace FoodDelivery.API.Controllers
             return Ok(new
             {
                 Message = "Product Added Successfully"
+            });
+        }
+
+        // Add Multiple Products
+        [HttpPost("bulk")]
+        public async Task<IActionResult> AddProducts(List<ProductDto> products)
+        {
+            await _productService.AddProducts(products);
+
+            return Ok(new
+            {
+                Message = "Products Added Successfully"
             });
         }
 

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FoodDelivery.API.Data;
 using FoodDelivery.API.Services;
 using Microsoft.EntityFrameworkCore;
@@ -15,8 +16,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add services to the container.
-builder.Services.AddControllers();
+// Add Controllers + Ignore Circular Reference
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 // Register MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -28,6 +33,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register Services
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<OrderService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

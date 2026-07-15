@@ -9,4 +9,7 @@ public class User
     public string Email { get; set; } = "";
 
     public string PasswordHash { get; set; } = "";
+
+    // New Property
+    public string Role { get; set; } = "User";
 }

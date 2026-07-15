@@ -1,4 +1,5 @@
-﻿using FoodDelivery.API.Data;
+﻿using System.Linq;
+using FoodDelivery.API.Data;
 using FoodDelivery.API.DTOs;
 using FoodDelivery.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ namespace FoodDelivery.API.Services
             _context = context;
         }
 
-        // Add Product
+        // Add Single Product
         public async Task AddProduct(ProductDto dto)
         {
             var product = new Product
@@ -27,6 +28,22 @@ namespace FoodDelivery.API.Services
             };
 
             _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+        }
+
+        // Add Multiple Products
+        public async Task AddProducts(List<ProductDto> dtos)
+        {
+            var products = dtos.Select(dto => new Product
+            {
+                Name = dto.Name,
+                Description = dto.Description,
+                Price = dto.Price,
+                ImageUrl = dto.ImageUrl,
+                Category = dto.Category
+            }).ToList();
+
+            await _context.Products.AddRangeAsync(products);
             await _context.SaveChangesAsync();
         }
 
@@ -74,7 +91,6 @@ namespace FoodDelivery.API.Services
             }
 
             _context.Products.Remove(product);
-
             await _context.SaveChangesAsync();
 
             return true;

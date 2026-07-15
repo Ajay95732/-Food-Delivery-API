@@ -15,14 +15,19 @@ namespace FoodDelivery.API.Controllers
             _authService = authService;
         }
 
+        // Register
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
             await _authService.Register(dto);
 
-            return Ok("User Registered Successfully");
+            return Ok(new
+            {
+                Message = "User Registered Successfully"
+            });
         }
 
+        // Login
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto dto)
         {
@@ -37,6 +42,32 @@ namespace FoodDelivery.API.Controllers
             {
                 Message = "Login Successful",
                 User = user
+            });
+        }
+
+        // Get All Users
+        [HttpGet("users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _authService.GetAllUsers();
+
+            return Ok(users);
+        }
+
+        // Delete User
+        [HttpDelete("users/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var deleted = await _authService.DeleteUser(id);
+
+            if (!deleted)
+            {
+                return NotFound("User Not Found");
+            }
+
+            return Ok(new
+            {
+                Message = "User Deleted Successfully"
             });
         }
     }

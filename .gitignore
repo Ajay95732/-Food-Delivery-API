@@ -1,0 +1,51 @@
+# Build Results
+bin/
+obj/
+Debug/
+Release/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+.vscode/
+.idea/
+
+# NuGet
+packages/
+*.nupkg
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.*
+
+# Publish Output
+publish/
+artifacts/
+
+# Uploads
+wwwroot/uploads/
+uploads/
+
+# Secrets
+secrets.json
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Temporary Files
+*.tmp
+*.temp
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
