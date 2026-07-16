@@ -24,10 +24,11 @@ namespace FoodDelivery.API.Services
                 Description = dto.Description,
                 Price = dto.Price,
                 ImageUrl = dto.ImageUrl,
-                Category = dto.Category
+                CategoryId = dto.CategoryId
             };
 
             _context.Products.Add(product);
+
             await _context.SaveChangesAsync();
         }
 
@@ -40,23 +41,28 @@ namespace FoodDelivery.API.Services
                 Description = dto.Description,
                 Price = dto.Price,
                 ImageUrl = dto.ImageUrl,
-                Category = dto.Category
+                CategoryId = dto.CategoryId
             }).ToList();
 
             await _context.Products.AddRangeAsync(products);
+
             await _context.SaveChangesAsync();
         }
 
         // Get All Products
         public async Task<List<Product>> GetAllProducts()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products
+                .Include(p => p.Category)
+                .ToListAsync();
         }
 
         // Get Product By Id
         public async Task<Product?> GetProductById(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         // Update Product
@@ -65,15 +71,13 @@ namespace FoodDelivery.API.Services
             var product = await _context.Products.FindAsync(id);
 
             if (product == null)
-            {
                 return false;
-            }
 
             product.Name = dto.Name;
             product.Description = dto.Description;
             product.Price = dto.Price;
             product.ImageUrl = dto.ImageUrl;
-            product.Category = dto.Category;
+            product.CategoryId = dto.CategoryId;
 
             await _context.SaveChangesAsync();
 
@@ -86,11 +90,10 @@ namespace FoodDelivery.API.Services
             var product = await _context.Products.FindAsync(id);
 
             if (product == null)
-            {
                 return false;
-            }
 
             _context.Products.Remove(product);
+
             await _context.SaveChangesAsync();
 
             return true;

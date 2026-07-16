@@ -54,6 +54,23 @@ namespace FoodDelivery.API.Controllers
             return Ok(users);
         }
 
+        // Update User
+        [HttpPut("users/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, RegisterDto dto)
+        {
+            var updated = await _authService.UpdateUser(id, dto);
+
+            if (!updated)
+            {
+                return NotFound("User Not Found");
+            }
+
+            return Ok(new
+            {
+                Message = "User Updated Successfully"
+            });
+        }
+
         // Delete User
         [HttpDelete("users/{id}")]
         public async Task<IActionResult> DeleteUser(int id)

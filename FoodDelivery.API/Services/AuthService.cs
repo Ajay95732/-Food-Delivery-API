@@ -22,7 +22,9 @@ namespace FoodDelivery.API.Services
                 Name = dto.Name,
                 Email = dto.Email,
                 PasswordHash = dto.Password,
-                Role = "User"
+                Role = string.IsNullOrWhiteSpace(dto.Role)
+                    ? "User"
+                    : dto.Role
             };
 
             _context.Users.Add(user);
@@ -51,6 +53,29 @@ namespace FoodDelivery.API.Services
             return await _context.Users
                 .OrderByDescending(u => u.Id)
                 .ToListAsync();
+        }
+
+        // Update User
+        public async Task<bool> UpdateUser(int id, RegisterDto dto)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+                return false;
+
+            user.Name = dto.Name;
+            user.Email = dto.Email;
+
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                user.PasswordHash = dto.Password;
+            }
+
+            user.Role = dto.Role;
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         // Delete User

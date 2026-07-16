@@ -16,6 +16,8 @@ namespace FoodDelivery.API.Data
         // Products Table
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         // Orders Table
         public DbSet<Order> Orders { get; set; }
 
