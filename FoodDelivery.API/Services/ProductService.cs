@@ -15,6 +15,7 @@ namespace FoodDelivery.API.Services
             _context = context;
         }
 
+
         // Add Single Product
         public async Task AddProduct(ProductDto dto)
         {
@@ -32,6 +33,8 @@ namespace FoodDelivery.API.Services
             await _context.SaveChangesAsync();
         }
 
+
+
         // Add Multiple Products
         public async Task AddProducts(List<ProductDto> dtos)
         {
@@ -44,18 +47,50 @@ namespace FoodDelivery.API.Services
                 CategoryId = dto.CategoryId
             }).ToList();
 
+
             await _context.Products.AddRangeAsync(products);
 
             await _context.SaveChangesAsync();
         }
 
-        // Get All Products
-        public async Task<List<Product>> GetAllProducts()
+
+
+        // Get All Products With Pagination
+        public async Task<object> GetAllProducts(int page = 1, int pageSize = 10)
         {
-            return await _context.Products
+
+            var totalProducts = await _context.Products
+                .CountAsync();
+
+
+
+            var products = await _context.Products
                 .Include(p => p.Category)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+
+
+            return new
+            {
+                TotalProducts = totalProducts,
+
+                Page = page,
+
+                PageSize = pageSize,
+
+                TotalPages = (int)Math.Ceiling(
+                    (double)totalProducts / pageSize
+                ),
+
+                Data = products
+            };
+
         }
+
+
+
 
         // Get Product By Id
         public async Task<Product?> GetProductById(int id)
@@ -65,6 +100,9 @@ namespace FoodDelivery.API.Services
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+
+
+
         // Update Product
         public async Task<bool> UpdateProduct(int id, ProductDto dto)
         {
@@ -73,28 +111,38 @@ namespace FoodDelivery.API.Services
             if (product == null)
                 return false;
 
+
             product.Name = dto.Name;
             product.Description = dto.Description;
             product.Price = dto.Price;
             product.ImageUrl = dto.ImageUrl;
             product.CategoryId = dto.CategoryId;
 
+
             await _context.SaveChangesAsync();
+
 
             return true;
         }
+
+
+
 
         // Delete Product
         public async Task<bool> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
 
+
             if (product == null)
                 return false;
 
+
             _context.Products.Remove(product);
 
+
             await _context.SaveChangesAsync();
+
 
             return true;
         }

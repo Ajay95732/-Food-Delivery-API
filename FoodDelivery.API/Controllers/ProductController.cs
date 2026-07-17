@@ -39,13 +39,19 @@ namespace FoodDelivery.API.Controllers
             });
         }
 
-        // Get All Products
+        // Get All Products With Pagination
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts(
+            int page = 1,
+            int pageSize = 10)
         {
-            var products = await _productService.GetAllProducts();
+
+            var products = await _productService
+                .GetAllProducts(page, pageSize);
+
 
             return Ok(products);
+
         }
 
         // Get Product By Id
