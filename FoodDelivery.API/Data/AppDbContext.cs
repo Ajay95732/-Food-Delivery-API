@@ -23,5 +23,7 @@ namespace FoodDelivery.API.Data
 
         // Order Items Table
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<DeliveryBoy> DeliveryBoys { get; set; }
     }
 }

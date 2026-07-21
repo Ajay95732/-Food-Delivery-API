@@ -52,6 +52,16 @@ namespace FoodDelivery.API.Services
                 .ToListAsync();
         }
 
+        // Get Customer Orders
+        public async Task<List<Order>> GetOrdersByPhone(string phone)
+        {
+            return await _context.Orders
+                .Include(o => o.OrderItems)
+                .Where(o => o.Phone == phone)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+        }
+
         // Get Order By Id
         public async Task<Order?> GetOrderById(int id)
         {

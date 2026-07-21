@@ -36,6 +36,15 @@ namespace FoodDelivery.API.Controllers
             return Ok(orders);
         }
 
+        // Get Orders By Phone
+        [HttpGet("customer/{phone}")]
+        public async Task<IActionResult> GetOrdersByPhone(string phone)
+        {
+            var orders = await _orderService.GetOrdersByPhone(phone);
+
+            return Ok(orders);
+        }
+
         // Get Order By Id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById(int id)

@@ -35,6 +35,8 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<DeliveryBoyService>();
+builder.Services.AddScoped<RazorpayService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
