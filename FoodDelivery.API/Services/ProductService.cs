@@ -56,37 +56,11 @@ namespace FoodDelivery.API.Services
 
 
         // Get All Products With Pagination
-        public async Task<object> GetAllProducts(int page = 1, int pageSize = 10)
+        public async Task<List<Product>> GetAllProducts()
         {
-
-            var totalProducts = await _context.Products
-                .CountAsync();
-
-
-
-            var products = await _context.Products
+            return await _context.Products
                 .Include(p => p.Category)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
-
-
-
-            return new
-            {
-                TotalProducts = totalProducts,
-
-                Page = page,
-
-                PageSize = pageSize,
-
-                TotalPages = (int)Math.Ceiling(
-                    (double)totalProducts / pageSize
-                ),
-
-                Data = products
-            };
-
         }
 
 
